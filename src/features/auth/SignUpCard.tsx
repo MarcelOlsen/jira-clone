@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { registerSchema } from "./schemas";
-import { useRegister } from "./api/use-login copy";
+import { useRegister } from "./api/use-register";
 
 export const SingUpCard = () => {
   const { mutate } = useRegister();
