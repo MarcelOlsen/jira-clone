@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
-import { ArrowLeftIcon, ImageIcon } from "lucide-react";
+import { ArrowLeftIcon, CopyIcon, ImageIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +28,8 @@ import { Workspace } from "../types";
 import { useUpdateWorkspace } from "../api/use-update-workspace";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
+import { toast } from "sonner";
+import { useResetInviteCode } from "../api/use-reset-invite-code";
 
 interface EditWorkspaceFormProps {
   onCancel?: () => void;
@@ -42,10 +44,18 @@ export const EditWorkspaceForm = ({
   const router = useRouter();
   const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
     useDeleteWorkspace();
+  const { mutate: resetInviteCode, isPending: isResetingInviteCode } =
+    useResetInviteCode();
 
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Workspace",
     "This action cannot be undone!",
+    "destructive"
+  );
+
+  const [ResetDialog, confirmReset] = useConfirm(
+    "Reset invite link",
+    "This will invalidate the current invite link!",
     "destructive"
   );
 
@@ -61,6 +71,23 @@ export const EditWorkspaceForm = ({
       {
         onSuccess: () => {
           window.location.href = "/";
+        },
+      }
+    );
+  };
+
+  const handleResetInviteCode = async () => {
+    const ok = await confirmReset();
+
+    if (!ok) return;
+
+    resetInviteCode(
+      {
+        param: { workspaceId: initialValues.$id },
+      },
+      {
+        onSuccess: () => {
+          router.refresh();
         },
       }
     );
@@ -103,9 +130,18 @@ export const EditWorkspaceForm = ({
     }
   };
 
+  const fullInviteLink = `${window.location.origin}/workspaces/${initialValues.$id}/join/${initialValues.inviteCode}`;
+
+  const handleCopyInviteLink = () => {
+    navigator.clipboard
+      .writeText(fullInviteLink)
+      .then(() => toast.success("Invite link copied to clipboard!"));
+  };
+
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
+      <ResetDialog />
       <Card className="w-full h-full border-none shadow-none">
         <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
           <Button
@@ -244,11 +280,45 @@ export const EditWorkspaceForm = ({
       <Card className="w-full h-full border-none shadow-none">
         <CardContent className="p-7">
           <div className="flex flex-col">
+            <h3 className="font-bold">Invite Memebers</h3>
+            <p className="text-sm text-muted-foreground">
+              Use the invite link to add members to your workspace.
+            </p>
+            <div className="mt-4">
+              <div className="flex items-center gap-x-2">
+                <Input disabled value={fullInviteLink} />
+                <Button
+                  onClick={handleCopyInviteLink}
+                  variant="secondary"
+                  className="size-12"
+                >
+                  <CopyIcon className="size-5" />
+                </Button>
+              </div>
+            </div>
+            <DottedSeparator className="py-7" />
+            <Button
+              size="sm"
+              variant="destructive"
+              type="button"
+              disabled={isPending || isResetingInviteCode}
+              onClick={handleResetInviteCode}
+              className="mt-6 w-fit ml-auto"
+            >
+              Reset invite link
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="w-full h-full border-none shadow-none">
+        <CardContent className="p-7">
+          <div className="flex flex-col">
             <h3 className="font-bold">Danger Zone</h3>
             <p className="text-sm text-muted-foreground">
               Deleting a workspace is irreversible and will remove associated
               data.
             </p>
+            <DottedSeparator className="py-7" />
             <Button
               size="sm"
               variant="destructive"
