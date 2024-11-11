@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
-import { CreateWorkspaceModal } from "@/features/workspaces/components/craete-workspace-modal";
+import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal";
 import React from "react";
 interface DashboardLayerProps {
   children: React.ReactNode;
