@@ -185,7 +185,7 @@ const app = new Hono()
                     projectId,
                     dueDate,
                     assigneeId,
-                    positoin: newPosition
+                    position: newPosition
                 }
             )
 
