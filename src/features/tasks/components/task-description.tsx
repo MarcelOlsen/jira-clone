@@ -2,12 +2,11 @@ import { useState } from "react";
 import { PencilIcon, XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { DottedSeparator } from "@/components/dotted-separator";
 
 import { Task } from "../types";
 import { useUpdateTask } from "../api/use-update-task";
-import { Textarea } from "@/components/ui/textarea";
-import { Source_Serif_4 } from "next/font/google";
 
 interface TaskDescriptionProps {
   task: Task;
@@ -20,10 +19,17 @@ export const TaskDescription = ({ task }: TaskDescriptionProps) => {
   const { mutate, isPending } = useUpdateTask();
 
   const handleSave = () => {
-    mutate({
-      json: { description: value },
-      param: { taskId: task.$id },
-    });
+    mutate(
+      {
+        json: { description: value },
+        param: { taskId: task.$id },
+      },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+        },
+      },
+    );
   };
 
   return (

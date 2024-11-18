@@ -50,13 +50,13 @@ export const EditWorkspaceForm = ({
   const [DeleteDialog, confirmDelete] = useConfirm(
     "Delete Workspace",
     "This action cannot be undone!",
-    "destructive"
+    "destructive",
   );
 
   const [ResetDialog, confirmReset] = useConfirm(
     "Reset invite link",
     "This will invalidate the current invite link!",
-    "destructive"
+    "destructive",
   );
 
   const handleDelete = async () => {
@@ -72,7 +72,7 @@ export const EditWorkspaceForm = ({
         onSuccess: () => {
           window.location.href = "/";
         },
-      }
+      },
     );
   };
 
@@ -81,16 +81,9 @@ export const EditWorkspaceForm = ({
 
     if (!ok) return;
 
-    resetInviteCode(
-      {
-        param: { workspaceId: initialValues.$id },
-      },
-      {
-        onSuccess: () => {
-          form.reset();
-        },
-      }
-    );
+    resetInviteCode({
+      param: { workspaceId: initialValues.$id },
+    });
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -109,18 +102,10 @@ export const EditWorkspaceForm = ({
       image: values.image instanceof File ? values.image : "",
     };
 
-    mutate(
-      {
-        form: finalValues,
-        param: { workspaceId: initialValues.$id },
-      },
-      {
-        onSuccess: ({ data }) => {
-          form.reset();
-          router.push(`/workspaces/${data.$id}`);
-        },
-      }
-    );
+    mutate({
+      form: finalValues,
+      param: { workspaceId: initialValues.$id },
+    });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

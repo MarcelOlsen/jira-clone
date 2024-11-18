@@ -33,9 +33,9 @@ interface CreateProjectFormProps {
 }
 
 export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
+  const router = useRouter();
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateProject();
-  const router = useRouter();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,11 +58,10 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
         form: finalValues,
       },
       {
-        onSuccess: ({ data }) => {
-          form.reset();
-          //TODO: redirect to project screen
+        onSuccess: () => {
+          //todo: redirect to project
         },
-      }
+      },
     );
   };
 

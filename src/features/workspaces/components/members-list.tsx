@@ -7,7 +7,7 @@ import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { useDeleteMember } from "@/features/members/api/use-delete-member";
-import { useUpdateMember } from "@/features/members/api/use-udpate-member";
+import { useUpdateMember } from "@/features/members/api/use-update-member";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export const MembersList = () => {
   const [ConfirmDialog, confirm] = useConfirm(
     "Remove member",
     "This user will be removed from the workspace",
-    "destructive"
+    "destructive",
   );
   const { mutate: deleteMember, isPending: isDeletingMember } =
     useDeleteMember();
@@ -56,7 +56,7 @@ export const MembersList = () => {
         onSuccess: () => {
           window.location.reload();
         },
-      }
+      },
     );
   };
 

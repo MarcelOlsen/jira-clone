@@ -112,7 +112,7 @@ export const DataKanban = ({ data, onChange }: DataKanbanProps) => {
         newTasks[destinationStatus] = destinationColumn;
 
         //preparing the minimum updated payload
-        //so that we only update the necessary data, and don't send huge udpate payloads
+        //so that we only update the necessary data, and don't send huge update payloads
         updatesPayload = [];
 
         updatesPayload.push({

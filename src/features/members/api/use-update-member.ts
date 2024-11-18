@@ -5,30 +5,33 @@ import { toast } from "sonner";
 import { client } from "@/lib/rpc";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.tasks)["bulk-update"]["$post"],
+  (typeof client.api.members)[":memberId"]["$patch"],
   200
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.tasks)["bulk-update"]["$post"]
+  (typeof client.api.members)[":memberId"]["$patch"]
 >;
 
-export const useBulkUpdateTasks = () => {
+export const useUpdateMember = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
-      const response = await client.api.tasks["bulk-update"]["$post"]({ json });
+    mutationFn: async ({ param, json }) => {
+      const response = await client.api.members[":memberId"]["$patch"]({
+        param,
+        json,
+      });
 
-      if (!response.ok) throw new Error("Failed to update tasks");
+      if (!response.ok) throw new Error("Failed to update member");
 
       return await response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      toast.success("Tasks updated");
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+      toast.success("Member updated");
     },
     onError: () => {
-      toast.error("Failed to update tasks");
+      toast.error("Failed to update member");
     },
   });
 

@@ -3,37 +3,38 @@ import { InferRequestType, InferResponseType } from "hono";
 import { toast } from "sonner";
 
 import { client } from "@/lib/rpc";
-import { useRouter } from "next/navigation";
 
-type ResponseType = InferResponseType<typeof client.api.tasks[":taskId"]["$patch"], 200>
-type RequestType = InferRequestType<typeof client.api.tasks[":taskId"]["$patch"]>
+type ResponseType = InferResponseType<
+  (typeof client.api.tasks)[":taskId"]["$patch"],
+  200
+>;
+type RequestType = InferRequestType<
+  (typeof client.api.tasks)[":taskId"]["$patch"]
+>;
 
 export const useUpdateTask = () => {
-    const router = useRouter();
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    const mutation = useMutation<
-        ResponseType,
-        Error,
-        RequestType
-    >({
-        mutationFn: async ({ json, param }) => {
-            const response = await client.api.tasks[":taskId"]["$patch"]({ json, param })
+  const mutation = useMutation<ResponseType, Error, RequestType>({
+    mutationFn: async ({ json, param }) => {
+      const response = await client.api.tasks[":taskId"]["$patch"]({
+        json,
+        param,
+      });
 
-            if (!response.ok) throw new Error("Failed to update task")
+      if (!response.ok) throw new Error("Failed to update task");
 
-            return await response.json()
-        },
-        onSuccess: ({ data }) => {
-            router.refresh()
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["task", data.$id] })
-            toast.success("Task udpated")
-        },
-        onError: () => {
-            toast.error("Failed to update task")
-        }
-    })
+      return await response.json();
+    },
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task", data.$id] });
+      toast.success("Task updated");
+    },
+    onError: () => {
+      toast.error("Failed to update task");
+    },
+  });
 
-    return mutation
-}
+  return mutation;
+};
