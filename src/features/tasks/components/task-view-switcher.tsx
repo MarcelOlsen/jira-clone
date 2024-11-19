@@ -14,6 +14,7 @@ import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-task-modal
 import { useTaskFilters } from "@/features/tasks/hooks/use-task-filters";
 import { useBulkUpdateTasks } from "@/features/tasks/api/use-bulk-update-tasks";
 import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
+import { useProjectId } from "@/features/projects/hooks/use-project-id";
 
 import { DataFilters } from "./data-filters";
 import { DataTable } from "./data-table";
@@ -37,11 +38,12 @@ export const TaskViewSwitcher = ({
   });
 
   const workspaceId = useWorkspaceId();
+  const paramProjectId = useProjectId();
 
   const { open } = useCreateTaskModal();
   const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({
     workspaceId,
-    projectId,
+    projectId: paramProjectId || projectId,
     assigneeId,
     status,
     dueDate,
@@ -77,7 +79,7 @@ export const TaskViewSwitcher = ({
               Calendar
             </TabsTrigger>
           </TabsList>
-          <Button size="sm" className="w-full lg:w-auto" onClick={open}>
+          <Button size="sm" className="w-full lg:w-auto" onClick={() => open()}>
             <PlusIcon className="size-4" />
             New
           </Button>

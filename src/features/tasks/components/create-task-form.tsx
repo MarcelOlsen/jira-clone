@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 
 import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
@@ -51,7 +50,6 @@ export const CreateTaskForm = ({
   const workspaceId = useWorkspaceId();
   const { mutate, isPending } = useCreateTask();
   const { initialStatus } = useCreateTaskModal();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof createTaskSchema>>({
     resolver: zodResolver(createTaskSchema.omit({ workspaceId: true })),
@@ -71,7 +69,7 @@ export const CreateTaskForm = ({
           form.reset();
           onCancel?.();
         },
-      }
+      },
     );
   };
 

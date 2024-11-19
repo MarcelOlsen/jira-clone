@@ -15,7 +15,6 @@ export const TaskIdClient = () => {
   const { data, isLoading } = useGetTask({ taskId });
 
   if (isLoading) return <PageLoader />;
-
   if (!data) return <PageError message="Task not found" />;
 
   return (

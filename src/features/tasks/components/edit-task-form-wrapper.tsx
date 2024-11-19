@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 import { EditTaskForm } from "./edit-task-form";
 import { useGetTask } from "../api/use-get-task";
-import { Task } from "../types";
 
 interface EditTaskFormWrapperProps {
   onCancel: () => void;

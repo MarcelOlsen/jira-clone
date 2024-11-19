@@ -257,7 +257,7 @@ const app = new Hono()
     const { users } = await createAdminClient();
     const { taskId } = c.req.param();
 
-    const task = await databases.getDocument(DATABASE_ID, TASKS_ID, taskId);
+    const task = await databases.getDocument<Task>(DATABASE_ID, TASKS_ID, taskId);
 
     const currentMember = await getMember({
       databases,
@@ -334,6 +334,9 @@ const app = new Hono()
         return c.json({ error: "All tasks must belong to the same workspace" });
 
       const workspaceId = workspaceIds.values().next().value;
+
+      if (!workspaceId)
+        return c.json({ error: "Workspace ID is required" }, 400);
 
       const member = await getMember({
         databases,
