@@ -125,7 +125,7 @@ const app = new Hono()
 
           return {
             ...member,
-            name: user.name,
+            name: user.name || user.email,
             email: user.email,
           };
         }),
@@ -257,7 +257,11 @@ const app = new Hono()
     const { users } = await createAdminClient();
     const { taskId } = c.req.param();
 
-    const task = await databases.getDocument<Task>(DATABASE_ID, TASKS_ID, taskId);
+    const task = await databases.getDocument<Task>(
+      DATABASE_ID,
+      TASKS_ID,
+      taskId,
+    );
 
     const currentMember = await getMember({
       databases,
@@ -283,7 +287,7 @@ const app = new Hono()
 
     const assignee = {
       ...member,
-      name: user.name,
+      name: user.name || user.email,
       email: user.email,
     };
 
