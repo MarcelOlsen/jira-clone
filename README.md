@@ -3,7 +3,7 @@
 
 A full-featured project management application built with Next.js, inspired by Jira's functionality.
 
-Built with inspiration from [this legend](https://www.youtube.com/@codewithantonio). The culmination of a 2 week long project, which I'm really proud of, as it's the first project of this size for me. It uses Hono for the server, which makes it more type-safe. Also implemented RPC for even more type-safety. Check it out by either signing up through an email and password, or simply use Google or Github!
+The culmination of a 2 week long project, which I'm really proud of, as it's the first project of this size for me. It uses Hono for the server, which makes it more type-safe. Also implemented RPC for even more type-safety. Check it out by either signing up through an email and password, or simply use Google or Github!
 
 ## Live Demo
 Visit [jira.marcelolsen.dev](https://jira.marcelolsen.dev) to try out the application.
